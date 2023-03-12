@@ -1,0 +1,3 @@
+fsdb2saif ./FSDB/IOTDF_F1.fsdb -o IOTDF.fsdb.saif
+#you can see jacky's dc note
+#read_saif -input IOTDF.fsdb.saif -instance_name test/u_IOTDF

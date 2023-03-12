@@ -1,0 +1,149 @@
+Error: Library Compiler executable path is not set. (PT-063)
+
+                                 PrimeTime (R)
+
+                 Version R-2020.09 for linux64 - Aug 26, 2020 
+
+                    Copyright (c) 1988 - 2020 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+            or distribution of this software is strictly prohibited.
+#======================================================
+#
+# PrimeTime  Scripts (dctcl mode)
+#
+#======================================================
+source synopsys_pt.setup
+Warning: Variable sh_enable_line_editing can be set only in the .synopsys_pt.setup file. (CLE-04)
+Warning: Command line editor is already in emacs mode. (CLE-03)
+#======================================================
+#  1. Set the Power Analysis Mode
+#======================================================
+set power_enable_analysis true
+Information: Checked out license 'PrimePower' (PT-019)
+true
+set power_analysis_mode time_based
+time_based
+set power_report_leakage_breakdowns true
+true
+set power_clock_network_include_register_clock_pin_power false
+false
+#======================================================
+#  2. Read and link the design
+#======================================================
+set DESIGN "IOTDF"
+IOTDF
+current_design $DESIGN
+Information: current_design won't return any data before link (DES-071)
+read_verilog "./Netlist/IOTDF_syn.v"
+1
+link
+Loading verilog file '/home/rain/IC_contest/iot_data_final2019/icc2019cb/Netlist/IOTDF_syn.v'
+Loading db file '/usr/cad/Design_Kit/CBDK_IC_Contest_v2.1/SynopsysDC/db/slow.db'
+Linking design IOTDF...
+Information: 469 (88.99%) library cells are unused in library slow..... (LNK-045)
+Information: total 469 library cells are unused (LNK-046)
+Design 'IOTDF' was successfully linked.
+Information: There are 4349 leaf cells, ports, hiers and 4522 nets in the design (LNK-047)
+1
+#======================================================
+#  3. Set transition time / annotate parasitics
+#======================================================
+set_input_transition .1 [all_inputs]
+1
+read_sdc  "/home/rain/IC_contest/iot_data_final2019/icc2019cb/Netlist/IOTDF_syn.sdc"
+
+Reading SDC version 2.1...
+Warning: SDC version in file (2.0) does not match the version you requested
+	from read_sdc (2.1).  Some constraints and options may not function. (SDC-2)
+Warning: SDC version in file (2.0) does not match the version you requested
+	from read_sdc (2.1).  Some constraints and options may not function. (SDC-2)
+1
+1
+read_sdf -load_delay net "/home/rain/IC_contest/iot_data_final2019/icc2019cb/Netlist/IOTDF_syn.sdf"
+
+****************************************
+Report : read_sdf /home/rain/IC_contest/iot_data_final2019/icc2019cb/Netlist/IOTDF_syn.sdf
+	-load_delay net
+	-analysis_type on_chip_variation
+	-min_type sdf_min
+	-max_type sdf_max
+Design : IOTDF
+Version: R-2020.09
+Date   : Sun Mar 12 20:04:35 2023
+****************************************
+
+        0 error(s)
+        Number of annotated cell delay arcs :     14551
+        Number of annotated net delay arcs  :     11519
+        Number of annotated timing checks   :      3990
+        Number of annotated constraints     :      1995
+        TEMPERATURE: 125.00 (min)  125.00 (max)
+        VOLTAGE    : 1.08 (min)  1.08 (max)
+        PROCESS    : slow (min)  slow (max)
+1
+#======================================================
+#  4. Read Switching Activity File
+#======================================================
+read_fsdb -strip_path testfixture/u_$DESIGN ./FSDB/$DESIGN\_F1.fsdb
+Information: Enabling native fsdb reader. 
+Information: Reading fsdb file '/home/rain/IC_contest/iot_data_final2019/icc2019cb/FSDB/IOTDF_F1.fsdb'
+** FSDB version : 5.8
+** FSDB Reader version : Verdi_P-2019.06-SP2-5
+** FSDB version supported upto: 5.8
+
+======================================================================
+Summary:
+Total number of nets = 4522
+Number of annotated nets = 0 (0.00%)
+Total number of leaf cells = 4204
+Number of fully annotated leaf cells = 0 (0.00%)
+======================================================================
+
+Warning: VCD coverage on the design is too small. Power may be underestimated. (PWR-007)
+1
+#======================================================
+#  5. Perform power analysis
+#======================================================
+check_power
+Warning: Zero transition time will be used at to pins of annotated arcs. Delays on not annotated delay arcs will be estimated using best available slew.  (PTE-066)
+Information: Building multi voltage information for entire design. (MV-022)
+Information: Zero transition time used at to pin of annotated arcs. Delays on not annotated delay arcs will be estimated using best available slew.  (PTE-054)
+Information: Zero transition time used at to pin of annotated arcs. Delays on not annotated delay arcs will be estimated using best available slew.  (PTE-054)
+Information: Checking 'out_of_table_range'.
+Warning: There are 11519 out_of_range ramps.
+Warning: There are 1 out_of_range loads.
+Information: Checking 'missing_table'.
+Information: Checking 'missing_function'.
+0
+update_power
+Information: Running time_based power analysis... (PWR-601)
+Information: Enabling native fsdb reader. 
+Information: Reading fsdb file '/home/rain/IC_contest/iot_data_final2019/icc2019cb/FSDB/IOTDF_F1.fsdb'
+** FSDB version : 5.8
+** FSDB Reader version : Verdi_P-2019.06-SP2-5
+** FSDB version supported upto: 5.8
+Warning: Unable to add any signals from FSDB..
+Warning: There are invalid value changes in the activity (VCD/VPD/FSDB) file. (PWR-505)
+Error: Can not find any event in the event file.  (PWR-248)
+0
+#======================================================
+#  6. Generate Power Report
+#======================================================
+# BUG command 
+set_power_analysis_options -waveform_interval 1 -waveform_format out -waveform_output vcd
+# vcd.out
+report_power >  ./Report/$DESIGN\_POWER
+exit
+Information: Defining new variable 'DESIGN'. (CMD-041)
+Information: Defining new variable 'synthetic_library'. (CMD-041)
+
+Timing updates: 1 (1 implicit, 0 explicit) (0 incremental, 1 full, 0 logical)
+Noise updates: 0 (0 implicit, 0 explicit) (0 incremental, 0 full)
+Maximum memory usage for this session: 1224.88 MB
+CPU usage for this session: 4 seconds 
+Elapsed time for this session: 4 seconds
+Diagnostics summary: 4 errors, 8 warnings, 12 informationals
+
+Thank you for using pt_shell!

@@ -1,0 +1,3 @@
+Command Line: /usr/cad/synopsys/verdi/cur/platform/LINUXAMD64/bin/fsdb2saif -help
+uname(Linux Lab716 2.6.32-696.el6.x86_64 #1 SMP Tue Mar 21 19:29:05 UTC 2017 x86_64)
+au time 0.496482 0.072989 0.005999 delta 18198528 18198528 total 117047296 117047296

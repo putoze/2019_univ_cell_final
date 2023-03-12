@@ -1,0 +1,11 @@
+Information: Running time_based power analysis... (PWR-601)
+Information: Enabling native fsdb reader. 
+Information: Reading fsdb file '/home/rain/IC_contest/iot_data_final2019/icc2019cb/FSDB/IOTDF_F1.fsdb'
+** FSDB version : 5.8
+** FSDB Reader version : Verdi_P-2019.06-SP2-5
+** FSDB version supported upto: 5.8
+Warning: Unable to add any signals from FSDB..
+Warning: There are invalid value changes in the activity (VCD/VPD/FSDB) file. (PWR-505)
+Error: Can not find any event in the event file.  (PWR-248)
+Error: Power is not calculated. Please run update_power before report_power.  (PRPT-115)
+0

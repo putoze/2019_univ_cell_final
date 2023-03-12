@@ -1,0 +1,1 @@
+read_saif -input IOTDF.fsdb.saif -instance_name test/IOTDF
